@@ -3,27 +3,36 @@ package main
 import (
 	"fmt"
 	"os"
-	"tetris-optimizer/src/utils" // Import the package used in the main function
+	"tetris-optimizer/src/utils"
+	"time"
 )
 
 func main() {
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: ./tetromino_solver <file_path>")
-		return
+		fmt.Println("usage: go run main.go path/to/<input file>")
+		os.Exit(1)
 	}
 
-	tetrominoes, err := utils.ParseFile(os.Args[1])
+	// Read the file
+	data, err := utils.ReadFile(os.Args[1])
 	if err != nil {
-		fmt.Println("ERROR")
+		fmt.Println(err)
 		return
 	}
 
-	solution := utils.FindSmallestSquare(tetrominoes)
-	if solution != nil {
-		for _, row := range solution {
-			fmt.Println(string(row))
-		}
-	} else {
+	// Parse the data into a Tetromino
+	Tetromino, err := utils.ParseTetromino(data)
+	if err != nil {
+		fmt.Println("ERROR:", err)
+		return
+	}
+
+	// Validate the Tetromino
+	if !utils.IsValid(Tetromino) {
 		fmt.Println("ERROR")
 	}
+
+	StartTime := time.Now()
+	fmt.Println("Solving time: ", time.Since(StartTime))
+
 }
