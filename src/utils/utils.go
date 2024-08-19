@@ -151,7 +151,7 @@ func solve(tetrominoes []*Tetromino, gridSize int) [][]rune {
 	return nil
 }
 
-func findSmallestSquare(tetrominoes []*Tetromino) [][]rune {
+func FindSmallestSquare(tetrominoes []*Tetromino) [][]rune {
 	size := 2
 	for size*size < len(tetrominoes)*4 {
 		size++

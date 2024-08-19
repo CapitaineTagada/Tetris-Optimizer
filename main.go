@@ -1,9 +1,9 @@
 package main
 
 import (
-	// Import the package used in the main function//+
 	"fmt"
 	"os"
+	"tetris-optimizer/src/utils" // Import the package used in the main function
 )
 
 func main() {
@@ -12,13 +12,13 @@ func main() {
 		return
 	}
 
-	tetrominoes, err := ParseFile(os.Args[1])
+	tetrominoes, err := utils.ParseFile(os.Args[1])
 	if err != nil {
 		fmt.Println("ERROR")
 		return
 	}
 
-	solution := findSmallestSquare(tetrominoes)
+	solution := utils.FindSmallestSquare(tetrominoes)
 	if solution != nil {
 		for _, row := range solution {
 			fmt.Println(string(row))
