@@ -44,7 +44,7 @@ func NewTetromino(shape [][]rune) (*Tetromino, error) {
 	return &Tetromino{croppedShape, width, height}, nil
 }
 
-func parseFile(path string) ([]*Tetromino, error) {
+func ParseFile(path string) ([]*Tetromino, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err

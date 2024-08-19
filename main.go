@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	// Import the package used in the main function//+
 	"fmt"
 	"os"
@@ -13,7 +12,7 @@ func main() {
 		return
 	}
 
-	tetrominoes, err := parseFile(os.Args[1])
+	tetrominoes, err := ParseFile(os.Args[1])
 	if err != nil {
 		fmt.Println("ERROR")
 		return
