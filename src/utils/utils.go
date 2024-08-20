@@ -84,3 +84,5 @@ func ParseTetromino(data []byte) ([][]string, error) {
 
 	return Tetromino, nil
 }
+
+//Work on the solving function

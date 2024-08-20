@@ -32,7 +32,9 @@ func main() {
 		fmt.Println("ERROR")
 	}
 
-	StartTime := time.Now()
-	fmt.Println("Solving time: ", time.Since(StartTime))
+	if utils.IsValid(Tetromino) {
+		StartTime := time.Now()
+		fmt.Println("Solving time: ", time.Since(StartTime))
+	}
 
 }
