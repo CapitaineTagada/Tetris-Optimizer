@@ -2,39 +2,37 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"strings"
 	"tetris-optimizer/src/utils"
-	"time"
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("usage: go run main.go path/to/<input file>")
-		os.Exit(1)
-	}
+	filePath := os.Args[1]
 
-	// Read the file
-	data, err := utils.ReadFile(os.Args[1])
+	// Lire le contenu du fichier
+	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Usage: go run main.go path/to/<input file>")
 		return
 	}
 
-	// Parse the data into a Tetromino
-	Tetromino, err := utils.ParseTetromino(data)
-	if err != nil {
-		fmt.Println("ERROR:", err)
-		return
+	// Convert the content into a [][]string format
+	lines := strings.Split(string(content), "\n")
+	var Tetromino [][]string
+	for _, line := range lines {
+		if line != "" {
+			Tetromino = append(Tetromino, strings.Split(line, ""))
+		}
 	}
 
-	// Validate the Tetromino
 	if !utils.IsValid(Tetromino) {
 		fmt.Println("ERROR")
+		return
 	}
 
-	if utils.IsValid(Tetromino) {
-		StartTime := time.Now()
-		fmt.Println("Solving time: ", time.Since(StartTime))
-	}
+	// Afficher le contenu du fichier pour vérifier que la lecture a été réussie
+	fmt.Println(string(content))
 
 }
