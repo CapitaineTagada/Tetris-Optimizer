@@ -1,42 +1,47 @@
 package utils
 
 func IsValid(Tetromino [][]string) bool {
-	HashHere := false
-	for _, r := range Tetromino {
-		TetrominoConnect := 0
-		HashCount := 0
-		for CheckVertical, line := range r {
-			for CheckHorizontal, char := range line {
-				if char != '#' && char != '.' {
-					return false // check is characters are valid
-				} else if char == '#' {
-					HashHere = true
-					HashConnect := 0
-					HashCount++
-					if CheckVertical > 0 && r[CheckVertical-1][CheckHorizontal] == '#' {
-						HashConnect++
-					}
-					if CheckVertical < len(r)-1 && r[CheckVertical+1][CheckHorizontal] == '#' {
-						HashConnect++
-					}
-					if CheckHorizontal > 0 && r[CheckVertical][CheckHorizontal-1] == '#' {
-						HashConnect++
-					}
-					if CheckHorizontal < len(line)-1 && r[CheckVertical][CheckHorizontal+1] == '#' {
-						HashConnect++
-					}
-					if HashConnect == 0 {
-						return false
-					} else {
-						TetrominoConnect += HashConnect
-					}
+	if len(Tetromino) != 4 || len(Tetromino[0]) != 4 {
+		return false // Tetromino must be 4x4
+	}
+
+	hashCount := 0
+	connections := 0
+
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 4; j++ {
+			if Tetromino[i][j] != "#" && Tetromino[i][j] != "." {
+				return false // Invalid character
+			}
+			if Tetromino[i][j] == "#" {
+				hashCount++
+				// Check connections
+				if i > 0 && Tetromino[i-1][j] == "#" {
+					connections++
+				}
+				if i < 3 && Tetromino[i+1][j] == "#" {
+					connections++
+				}
+				if j > 0 && Tetromino[i][j-1] == "#" {
+					connections++
+				}
+				if j < 3 && Tetromino[i][j+1] == "#" {
+					connections++
 				}
 			}
 		}
-		if !HashHere {
-			return false
-		}
 	}
+
+	// A valid tetromino must have exactly 4 '#' characters
+	if hashCount != 4 {
+		return false
+	}
+
+	// A valid tetromino must have at least 3 connections (4 '#' connected in a valid shape)
+	if connections < 6 {
+		return false
+	}
+
 	return true
 }
 
