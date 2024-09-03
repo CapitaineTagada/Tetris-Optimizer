@@ -1,6 +1,7 @@
 package utils
 
 func IsValid(Tetromino [][]string) bool {
+	HashHere := false
 	for _, r := range Tetromino {
 		TetrominoConnect := 0
 		HashCount := 0
@@ -9,6 +10,7 @@ func IsValid(Tetromino [][]string) bool {
 				if char != '#' && char != '.' {
 					return false // check is characters are valid
 				} else if char == '#' {
+					HashHere = true
 					HashConnect := 0
 					HashCount++
 					if CheckVertical > 0 && r[CheckVertical-1][CheckHorizontal] == '#' {
@@ -30,6 +32,9 @@ func IsValid(Tetromino [][]string) bool {
 					}
 				}
 			}
+		}
+		if !HashHere {
+			return false
 		}
 	}
 	return true

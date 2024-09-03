@@ -18,7 +18,7 @@ func main() {
 		return
 	}
 
-	// Convert the content into a [][]string format
+	// Convert the content into a [][]string format, if not the !IsValid(Tetromino) doesn't work
 	lines := strings.Split(string(content), "\n")
 	var Tetromino [][]string
 	for _, line := range lines {
