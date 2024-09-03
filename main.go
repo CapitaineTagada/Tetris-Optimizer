@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"os"
 	"strings"
 	"tetris-optimizer/src/utils"
+	"time"
 )
 
 func main() {
@@ -22,21 +24,46 @@ func main() {
 		fmt.Println("Error reading file:", err)
 		return
 	}
-	// Convert the content into a [][]string format, if not the !IsValid(Tetromino) doesn't work
+
+	// Convert the content into a [][]string format
 	lines := strings.Split(string(content), "\n")
-	var Tetromino [][]string
+	var tetrominos [][]string
+	var currentTetromino []string
+
 	for _, line := range lines {
-		if line != "" {
-			Tetromino = append(Tetromino, strings.Split(line, ""))
+		if line == "" {
+			if len(currentTetromino) > 0 {
+				tetrominos = append(tetrominos, currentTetromino)
+				currentTetromino = nil
+			}
+		} else {
+			currentTetromino = append(currentTetromino, line)
 		}
 	}
+	if len(currentTetromino) > 0 {
+		tetrominos = append(tetrominos, currentTetromino)
+	}
 
-	if !utils.IsValid(Tetromino) {
+	if !utils.IsValid(tetrominos) {
 		fmt.Println("ERROR")
 		return
 	}
 
-	// Afficher le contenu du fichier pour vérifier que la lecture a été réussie
-	fmt.Println(string(content))
+	timeStarted := time.Now()
+	trimmedTetrominos := utils.Trimmer(tetrominos)
 
+	Size := int(math.Ceil(math.Sqrt(float64(len(trimmedTetrominos) * 4))))
+	var finalboard [][]string
+	for {
+		board := utils.CreateBoard(Size)
+		finalboard = utils.Solve(board, trimmedTetrominos)
+		if finalboard != nil {
+			break
+		}
+		Size++
+	}
+
+	utils.Print(finalboard)
+
+	fmt.Println("\nSolving time:", time.Since(timeStarted))
 }

@@ -34,17 +34,17 @@ go run main.go src/examples/goodexample00.txt
 echo "----------------------------------------------------------"
 
 echo Test 8: Try good example 01
-go run main.go src/examples/badexample01.txt
+go run main.go src/examples/goodexample01.txt
 
 echo "----------------------------------------------------------"
 
 echo Test 9: Try good example 02
-go run main.go src/examples/badexample02.txt
+go run main.go src/examples/goodexample02.txt
 
 echo "----------------------------------------------------------"
 
 echo Test 10: Try good example 03
-go run main.go src/examples/badexample03.txt
+go run main.go src/examples/goodexample03.txt
 
 echo "----------------------------------------------------------"
 

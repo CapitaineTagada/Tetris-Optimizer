@@ -13,17 +13,20 @@ git clone https://zone01normandie.org/git/scointin/tetris-optimizer.git
 
 ```bash
 go run main.go src/examples/inputfile.txt
-
-to run the test file: prout
+```
+to run the test file: 
+```bash
+./test.sh
+```
+If you have trouble running the test file you can use this command:
+```bash
+chmod +x test.sh
 ```
 
 ## Tech
 go version 1.23.0
 
 Only standard library is used
-
-## Ressources
-le lien là
 
 ## Author
 S. Cointin
