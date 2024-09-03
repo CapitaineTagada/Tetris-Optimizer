@@ -9,30 +9,40 @@ import (
 )
 
 func main() {
-	filePath := os.Args[1]
-
-	// Lire le contenu du fichier
-	content, err := ioutil.ReadFile(filePath)
-	if err != nil {
+	if len(os.Args) < 2 {
 		fmt.Println("Usage: go run main.go path/to/<input file>")
 		return
 	}
 
-	// Convert the content into a [][]string format, if not the !IsValid(Tetromino) doesn't work
-	lines := strings.Split(string(content), "\n")
-	var Tetromino [][]string
-	for _, line := range lines {
-		if line != "" {
-			Tetromino = append(Tetromino, strings.Split(line, ""))
-		}
-	}
+	filePath := os.Args[1]
 
-	if !utils.IsValid(Tetromino) {
-		fmt.Println("ERROR")
+	// Read the content of the file
+	content, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
 		return
 	}
 
-	// Afficher le contenu du fichier pour vérifier que la lecture a été réussie
-	fmt.Println(string(content))
+	// Split the content into individual tetrominoes
+	tetrominoStrings := strings.Split(strings.TrimSpace(string(content)), "\n\n")
+	var tetrominoes []utils.Tetromino
 
+	for i, tetrominoString := range tetrominoStrings {
+		lines := strings.Split(strings.TrimSpace(tetrominoString), "\n")
+		if !utils.IsValid(lines) {
+			fmt.Println("ERROR")
+			return
+		}
+		tetrominoes = append(tetrominoes, utils.Tetromino{
+			Shape:  lines,
+			Letter: string(rune('A' + i)),
+		})
+	}
+
+	solution := utils.SolveTetris(tetrominoes)
+
+	// Print the solution
+	for _, row := range solution {
+		fmt.Println(strings.Join(row, ""))
+	}
 }

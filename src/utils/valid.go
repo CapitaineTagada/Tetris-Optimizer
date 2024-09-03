@@ -1,7 +1,7 @@
 package utils
 
-func IsValid(Tetromino [][]string) bool {
-	if len(Tetromino) != 4 || len(Tetromino[0]) != 4 {
+func IsValid(tetromino []string) bool {
+	if len(tetromino) != 4 || len(tetromino[0]) != 4 {
 		return false // Tetromino must be 4x4
 	}
 
@@ -10,22 +10,22 @@ func IsValid(Tetromino [][]string) bool {
 
 	for i := 0; i < 4; i++ {
 		for j := 0; j < 4; j++ {
-			if Tetromino[i][j] != "#" && Tetromino[i][j] != "." {
+			if tetromino[i][j] != '#' && tetromino[i][j] != '.' {
 				return false // Invalid character
 			}
-			if Tetromino[i][j] == "#" {
+			if tetromino[i][j] == '#' {
 				hashCount++
 				// Check connections
-				if i > 0 && Tetromino[i-1][j] == "#" {
+				if i > 0 && tetromino[i-1][j] == '#' {
 					connections++
 				}
-				if i < 3 && Tetromino[i+1][j] == "#" {
+				if i < 3 && tetromino[i+1][j] == '#' {
 					connections++
 				}
-				if j > 0 && Tetromino[i][j-1] == "#" {
+				if j > 0 && tetromino[i][j-1] == '#' {
 					connections++
 				}
-				if j < 3 && Tetromino[i][j+1] == "#" {
+				if j < 3 && tetromino[i][j+1] == '#' {
 					connections++
 				}
 			}
@@ -44,15 +44,6 @@ func IsValid(Tetromino [][]string) bool {
 
 	return true
 }
-
-// Étape 1 : Lecture et validation du fichier d'entrée
-// Lire l'argument de ligne de commande pour obtenir le chemin du fichier texte.
-// Ouvrir et lire le fichier texte pour récupérer le contenu.
-// Vérifier la validité du fichier :
-// Le fichier doit contenir au moins un tétrimino.
-// Chaque tétrimino doit avoir exactement 4 lignes de 4 caractères (# ou .).
-// Chaque tétrimino doit contenir exactement 4 #.
-// Les tétriminos doivent être séparés par une ligne vide.
 
 // Étape 2 : Parsing des tétriminos
 // Diviser le contenu du fichier en blocs correspondant à chaque tétrimino.
