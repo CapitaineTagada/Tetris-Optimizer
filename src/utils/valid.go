@@ -1,81 +1,40 @@
 package utils
 
-func IsValid(tetromino []string) bool {
-	if len(tetromino) != 4 || len(tetromino[0]) != 4 {
-		return false // Tetromino must be 4x4
-	}
-
-	hashCount := 0
-	connections := 0
-
-	for i := 0; i < 4; i++ {
-		for j := 0; j < 4; j++ {
-			if tetromino[i][j] != '#' && tetromino[i][j] != '.' {
-				return false // Invalid character
-			}
-			if tetromino[i][j] == '#' {
-				hashCount++
-				// Check connections
-				if i > 0 && tetromino[i-1][j] == '#' {
-					connections++
-				}
-				if i < 3 && tetromino[i+1][j] == '#' {
-					connections++
-				}
-				if j > 0 && tetromino[i][j-1] == '#' {
-					connections++
-				}
-				if j < 3 && tetromino[i][j+1] == '#' {
-					connections++
+func IsValid(Tetrominos [][]string) bool {
+	for _, Tetromino := range Tetrominos {
+		TetrominoConnections := 0
+		HashtagsCount := 0
+		for indexVertical, line := range Tetromino {
+			for indexHorizontal, char := range line {
+				HashtagConnections := 0
+				if char != '#' && char != '.' {
+					return false
+				} else if char == '#' {
+					HashtagsCount++
+					if indexVertical > 0 && Tetromino[indexVertical-1][indexHorizontal] == '#' {
+						HashtagConnections++
+					}
+					if indexVertical < len(Tetromino)-1 && Tetromino[indexVertical+1][indexHorizontal] == '#' {
+						HashtagConnections++
+					}
+					if indexHorizontal > 0 && Tetromino[indexVertical][indexHorizontal-1] == '#' {
+						HashtagConnections++
+					}
+					if indexHorizontal < len(line)-1 && Tetromino[indexVertical][indexHorizontal+1] == '#' {
+						HashtagConnections++
+					}
+					if HashtagConnections == 0 {
+						return false
+					} else {
+						TetrominoConnections += HashtagConnections
+					}
 				}
 			}
 		}
-	}
-
-	// A valid tetromino must have exactly 4 '#' characters
-	if hashCount != 4 {
-		return false
-	}
-
-	// A valid tetromino must have at least 3 connections (4 '#' connected in a valid shape)
-	if connections < 6 {
-		return false
+		if TetrominoConnections < 6 || HashtagsCount > 4 {
+			return false
+		}
 	}
 
 	return true
 }
-
-// Étape 2 : Parsing des tétriminos
-// Diviser le contenu du fichier en blocs correspondant à chaque tétrimino.
-// Vérifier le format de chaque tétrimino pour s'assurer qu'il correspond aux règles mentionnées dans l'étape 3.
-// Stocker les tétriminos dans une structure de données appropriée (par exemple, une matrice 2D ou une liste de coordonnées des #).
-
-// Étape 3 : Normalisation des tétriminos
-// Normaliser chaque tétrimino :
-// Transposer chaque tétrimino pour qu'il soit dans sa position la plus en haut à gauche possible (retrait des lignes et colonnes vides en haut et à gauche).
-// Conserver cette forme normalisée dans une structure de données.
-
-// Étape 4 : Calcul du carré minimal
-// Déterminer la taille minimale du carré pouvant contenir tous les tétriminos.
-// Commencer avec le plus petit carré possible (par exemple, taille de 2x2 ou la racine carrée du nombre total de #).
-// Utiliser une technique d'essai et erreur pour augmenter la taille si nécessaire.
-
-// Étape 5 : Placement des tétriminos
-// Essayer de placer les tétriminos dans le carré de taille initiale :
-// Utiliser une méthode de backtracking (retour sur trace) pour essayer de placer chaque tétrimino dans toutes les positions possibles.
-// Si un placement est impossible, augmenter la taille du carré et réessayer.
-
-// Étape 6 : Algorithme de retour sur trace
-// Mettre en place l'algorithme de retour sur trace :
-// Pour chaque tétrimino, essayer de le placer dans le carré.
-// Si tous les tétriminos sont placés correctement, l'algorithme est terminé.
-// Si un tétrimino ne peut pas être placé, revenir à l'état précédent et essayer une autre configuration.
-
-// Étape 7 : Génération et affichage du résultat
-// Construire le carré final avec les positions des tétriminos placés correctement.
-// Afficher le carré final avec les tétriminos placés ou une erreur si aucun placement n'est possible avec les configurations actuelles.
-
-// Étape 8 : Gestion des erreurs
-// Gérer les erreurs tout au long des étapes :
-// Afficher "error" en cas de format incorrect du fichier d'entrée.
-// Traiter les cas d'erreurs possibles pendant le parsing et le placement des tétriminos.

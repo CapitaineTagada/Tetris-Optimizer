@@ -1,78 +1,43 @@
 package utils
 
-import (
-	"math"
-)
-
-// Tetromino represents a single tetromino piece
-type Tetromino struct {
-	Shape  []string
-	Letter string
-}
-
-// func ParseTetrominoes(content string) []Tetromino {
-// 	blocks := strings.Split(content, "\n\n")
-// 	tetrominoes := make([]Tetromino, 0)
-// 	for i, block := range blocks {
-// 		lines := strings.Split(strings.TrimSpace(block), "\n")
-// 		shape := make([][]string, len(lines))
-// 		for j, line := range lines {
-// 			shape[j] = strings.Split(line, "")
-// 		}
-// 		tetrominoes = append(tetrominoes, Tetromino{
-// 			Shape:  shape,
-// 			Letter: string(rune('A' + i)),
-// 		})
-// 	}
-// 	return tetrominoes
-// }
-
-func MakeBoard(size int) [][]string {
-	board := make([][]string, size)
-	for i := range board {
-		board[i] = make([]string, size)
-		for j := range board[i] {
-			board[i][j] = "."
-		}
+func Solve(board [][]string, tetrominoes [][]string) [][]string {
+	if Solvetetro(board, tetrominoes, 0) {
+		return board
 	}
-	return board
+	return nil
 }
 
-func backtrack(board [][]string, tetrominoes []Tetromino, index int) bool {
+func Solvetetro(board [][]string, tetrominoes [][]string, index int) bool {
+	// checks if all tetrominos have been exhausted
 	if index == len(tetrominoes) {
 		return true
 	}
-	for i := 0; i < len(board); i++ {
-		for j := 0; j < len(board); j++ {
-			if CanPlace(board, tetrominoes[index], i, j) {
-				Place(board, tetrominoes[index], i, j)
-				if backtrack(board, tetrominoes, index+1) {
+
+	tetromino := tetrominoes[index]
+	// Try to place the current tetromino at every possible position
+	for y := range board {
+		for x := range board[y] {
+			if canPlace(board, tetromino, x, y) {
+				placeTetromino(board, tetromino, x, y)
+				// Recursively try to place the next tetromino
+				if Solvetetro(board, tetrominoes, index+1) {
 					return true
 				}
-				Remove(board, tetrominoes[index], i, j)
+				// If unsuccessful remove the current tetromino and try the next position
+				removeTetromino(board, tetromino, x, y)
 			}
 		}
 	}
 	return false
 }
 
-func SolveTetris(tetrominoes []Tetromino) [][]string {
-	size := int(math.Ceil(math.Sqrt(float64(len(tetrominoes) * 4))))
-	for {
-		board := MakeBoard(size)
-		if backtrack(board, tetrominoes, 0) {
-			return board
-		}
-		size++
-	}
-}
-
-func CanPlace(board [][]string, tetromino Tetromino, row, col int) bool {
-	for i := 0; i < len(tetromino.Shape); i++ {
-		for j := 0; j < len(tetromino.Shape[i]); j++ {
-			if tetromino.Shape[i][j] == '#' {
-				newRow, newCol := row+i, col+j
-				if newRow >= len(board) || newCol >= len(board) || board[newRow][newCol] != "." {
+// canPlace checks if a tetromino can be placed at a given position on the board
+func canPlace(board [][]string, tetromino []string, x, y int) bool {
+	for dy, row := range tetromino {
+		for dx, char := range row {
+			if char != '.' {
+				// Check if the position is within the board and empty
+				if y+dy >= len(board) || x+dx >= len(board[0]) || board[y+dy][x+dx] != "." {
 					return false
 				}
 			}
@@ -81,21 +46,23 @@ func CanPlace(board [][]string, tetromino Tetromino, row, col int) bool {
 	return true
 }
 
-func Place(board [][]string, tetromino Tetromino, row, col int) {
-	for i := 0; i < len(tetromino.Shape); i++ {
-		for j := 0; j < len(tetromino.Shape[i]); j++ {
-			if tetromino.Shape[i][j] == '#' {
-				board[row+i][col+j] = tetromino.Letter
+// placeTetromino places a tetromino on the board at a given position
+func placeTetromino(board [][]string, tetromino []string, x, y int) {
+	for dy, row := range tetromino {
+		for dx, char := range row {
+			if char != '.' {
+				board[y+dy][x+dx] = string(char)
 			}
 		}
 	}
 }
 
-func Remove(board [][]string, tetromino Tetromino, row, col int) {
-	for i := 0; i < len(tetromino.Shape); i++ {
-		for j := 0; j < len(tetromino.Shape[i]); j++ {
-			if tetromino.Shape[i][j] == '#' {
-				board[row+i][col+j] = "."
+// removeTetromino removes a tetromino from the board at a given position
+func removeTetromino(board [][]string, tetromino []string, x, y int) {
+	for dy, row := range tetromino {
+		for dx, char := range row {
+			if char != '.' {
+				board[y+dy][x+dx] = "."
 			}
 		}
 	}

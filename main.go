@@ -22,27 +22,21 @@ func main() {
 		fmt.Println("Error reading file:", err)
 		return
 	}
-
-	// Split the content into individual tetrominoes
-	tetrominoStrings := strings.Split(strings.TrimSpace(string(content)), "\n\n")
-	var tetrominoes []utils.Tetromino
-
-	for i, tetrominoString := range tetrominoStrings {
-		lines := strings.Split(strings.TrimSpace(tetrominoString), "\n")
-		if !utils.IsValid(lines) {
-			fmt.Println("ERROR")
-			return
+	// Convert the content into a [][]string format, if not the !IsValid(Tetromino) doesn't work
+	lines := strings.Split(string(content), "\n")
+	var Tetromino [][]string
+	for _, line := range lines {
+		if line != "" {
+			Tetromino = append(Tetromino, strings.Split(line, ""))
 		}
-		tetrominoes = append(tetrominoes, utils.Tetromino{
-			Shape:  lines,
-			Letter: string(rune('A' + i)),
-		})
 	}
 
-	solution := utils.SolveTetris(tetrominoes)
-
-	// Print the solution
-	for _, row := range solution {
-		fmt.Println(strings.Join(row, ""))
+	if !utils.IsValid(Tetromino) {
+		fmt.Println("ERROR")
+		return
 	}
+
+	// Afficher le contenu du fichier pour vérifier que la lecture a été réussie
+	fmt.Println(string(content))
+
 }
