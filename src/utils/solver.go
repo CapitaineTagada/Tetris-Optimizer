@@ -9,7 +9,6 @@ func Solve(board [][]string, tetrominoes [][]string) [][]string {
 }
 
 // Tries to place tetrominoes on the board. It returns true if all tetrominoes are placed successfully.
-// Recursivity oh my gaaaaaaaad !!
 func SolveTetris(board [][]string, tetrominoes [][]string, index int, letter byte) bool {
 	// Base case: If all tetrominoes are placed, return true
 	if index == len(tetrominoes) {
